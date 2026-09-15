@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Narrativa Audiovisual — Aula 01</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080808;
+  --bg2: #0f0f0f;
+  --bg3: #161616;
+  --bg4: #1e1e1e;
+  --border: rgba(255,255,255,0.07);
+  --border-h: rgba(255,255,255,0.14);
+  --text: #f0ede8;
+  --text2: #888580;
+  --text3: #444240;
+  --gold: #c9a84c;
+  --gold2: #e8c97a;
+  --font-d: 'DM Serif Display', Georgia, serif;
+  --font-s: 'DM Sans', system-ui, sans-serif;
+  --r: 14px;
+  --r-sm: 8px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-s);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── CANVAS BG ─── */
+#metal-bg {
+  position: fixed; inset: 0; z-index: 0;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* ─── HERO ─── */
+.hero {
+  position: relative; z-index: 1;
+  padding: 96px 24px 72px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 45% at 50% 0%, rgba(201,168,76,0.09) 0%, transparent 68%);
+  pointer-events: none;
+}
+.hero-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.22);
+  background: rgba(201,168,76,0.06);
+  padding: 5px 16px; border-radius: 100px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-d);
+  font-size: clamp(40px, 7vw, 80px);
+  line-height: 1.08; letter-spacing: -0.025em;
+  margin-bottom: 20px; max-width: 720px; margin-left: auto; margin-right: auto;
+}
+.hero h1 em { font-style: italic; color: var(--gold2); }
+.hero-sub {
+  font-size: 15px; color: var(--text2); max-width: 440px;
+  margin: 0 auto 48px;
+}
+
+/* ─── METAL BUTTON (CSS-only replica) ─── */
+.m-btn-wrap {
+  position: relative; display: inline-block;
+  perspective: 1000px;
+}
+.m-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  height: 46px; padding: 0 22px;
+  border-radius: 100px;
+  border: none; outline: none;
+  cursor: pointer;
+  font-family: var(--font-s); font-size: 14px; font-weight: 500;
+  color: #888; letter-spacing: 0.01em;
+  background: transparent;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-decoration: none;
+  overflow: hidden;
+}
+.m-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 100px;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #2a2a2a 0deg,
+    #3d3d3d 45deg,
+    #555 90deg,
+    #3d3d3d 135deg,
+    #2a2a2a 180deg,
+    #1a1a1a 225deg,
+    #252525 270deg,
+    #333 315deg,
+    #2a2a2a 360deg
+  );
+  animation: metalShift 6s linear infinite;
+  z-index: 0;
+}
+.m-btn::after {
+  content: '';
+  position: absolute; inset: 2px;
+  border-radius: 100px;
+  background: linear-gradient(180deg, #202020 0%, #080808 100%);
+  z-index: 1;
+}
+.m-btn span { position: relative; z-index: 2; }
+.m-btn svg { position: relative; z-index: 2; }
+.m-btn:hover {
+  color: #aaa;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
+  transform: translateY(-1px);
+}
+.m-btn:hover::before { animation-duration: 2.5s; }
+.m-btn:active { transform: translateY(1px) scale(0.98); }
+
+@keyframes metalShift {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.m-btn-gold::before {
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #5a3e0a 0deg,
+    #9c7020 60deg,
+    #d4a030 120deg,
+    #f0c060 150deg,
+    #d4a030 180deg,
+    #9c7020 210deg,
+    #5a3e0a 240deg,
+    #3d2808 300deg,
+    #5a3e0a 360deg
+  );
+}
+.m-btn-gold { color: #c9a84c; }
+.m-btn-gold:hover { color: var(--gold2); box-shadow: 0 8px 32px rgba(201,168,76,0.2), 0 0 0 1px rgba(201,168,76,0.15); }
+
+/* ─── TABS ─── */
+.tab-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8,8,8,0.88);
+  backdrop-filter: blur(20px) saturate(1.2);
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: center; gap: 4px;
+  padding: 12px 24px; flex-wrap: wrap;
+}
+.tab-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 36px; padding: 0 18px;
+  border-radius: 100px; border: 1px solid transparent;
+  background: transparent; cursor: pointer;
+  font-family: var(--font-s); font-size: 13px; font-weight: 500;
+  color: var(--text2); transition: all 0.2s; overflow: hidden;
+  text-decoration: none;
+}
+.tab-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 100px;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #1e1e1e 0deg, #2a2a2a 90deg, #1e1e1e 180deg, #111 270deg, #1e1e1e 360deg
+  );
+  opacity: 0;
+  transition: opacity 0.2s;
+  animation: metalShift 8s linear infinite;
+  z-index: 0;
+}
+.tab-btn::after {
+  content: '';
+  position: absolute; inset: 1px;
+  border-radius: 100px;
+  background: var(--bg2);
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 1;
+}
+.tab-btn span { position: relative; z-index: 2; }
+.tab-btn:hover { color: var(--text); border-color: var(--border-h); }
+.tab-btn.active {
+  color: var(--gold2);
+  border-color: rgba(201,168,76,0.3);
+}
+.tab-btn.active::before { opacity: 1; background: conic-gradient(from 180deg at 50% 50%, #5a3e0a 0deg, #9c7020 60deg, #c9a84c 120deg, #9c7020 180deg, #5a3e0a 240deg, #3d2808 300deg, #5a3e0a 360deg); animation-duration: 3s; }
+.tab-btn.active::after { opacity: 1; }
+
+/* ─── LAYOUT ─── */
+.container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.section { display: none; padding: 60px 0; }
+.section.active { display: block; }
+
+/* ─── SECTION TITLES ─── */
+.sec-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+}
+.sec-h {
+  font-family: var(--font-d);
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.sec-desc { font-size: 15px; color: var(--text2); margin-bottom: 40px; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 52px 0; }
+
+/* ─── METAL CARD ─── */
+.m-card {
+  position: relative;
+  background: var(--bg2);
+  border-radius: var(--r);
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.m-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: var(--r);
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angle, 180deg) at 50% 50%,
+    rgba(255,255,255,0.04) 0deg,
+    rgba(255,255,255,0.12) 60deg,
+    rgba(255,255,255,0.04) 120deg,
+    rgba(255,255,255,0.02) 180deg,
+    rgba(255,255,255,0.08) 240deg,
+    rgba(255,255,255,0.02) 300deg,
+    rgba(255,255,255,0.04) 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderRotate 8s linear infinite;
+}
+@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes borderRotate { to { --angle: 360deg; } }
+
+.m-card:hover { transform: translateY(-2px); }
+.m-card-inner { padding: 22px; position: relative; z-index: 1; }
+
+/* gold variant */
+.m-card-gold::before {
+  background: conic-gradient(
+    from var(--angle, 180deg) at 50% 50%,
+    rgba(201,168,76,0.1) 0deg,
+    rgba(232,201,122,0.3) 60deg,
+    rgba(201,168,76,0.1) 120deg,
+    rgba(201,168,76,0.05) 180deg,
+    rgba(201,168,76,0.2) 240deg,
+    rgba(201,168,76,0.05) 300deg,
+    rgba(201,168,76,0.1) 360deg
+  );
+}
+
+.m-card.clickable { cursor: pointer; }
+
+/* ─── ELEMENT GRID ─── */
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+
+.el-icon { font-size: 26px; margin-bottom: 14px; display: block; }
+.el-title { font-size: 16px; font-weight: 600; margin-bottom: 5px; }
+.el-sub { font-size: 13px; color: var(--text2); line-height: 1.5; }
+.el-detail {
+  display: none; font-size: 13px; color: var(--text2);
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid rgba(201,168,76,0.15); line-height: 1.7;
+}
+.m-card.open .el-detail { display: block; }
+.el-detail strong { color: var(--gold2); font-weight: 500; }
+
+/* ─── BADGE ─── */
+.badge {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 100px; letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+.b-gold { background: rgba(201,168,76,0.1); color: var(--gold); border: 1px solid rgba(201,168,76,0.25); }
+.b-silver { background: rgba(180,180,180,0.08); color: #aaa; border: 1px solid rgba(180,180,180,0.2); }
+.b-blue { background: rgba(77,143,204,0.08); color: #6ab0f5; border: 1px solid rgba(77,143,204,0.2); }
+.b-purple { background: rgba(155,109,214,0.08); color: #b99ae0; border: 1px solid rgba(155,109,214,0.2); }
+.b-green { background: rgba(77,168,122,0.08); color: #7dd4a8; border: 1px solid rgba(77,168,122,0.2); }
+.b-red { background: rgba(201,66,61,0.08); color: #e07b78; border: 1px solid rgba(201,66,61,0.2); }
+
+/* ─── NARRATOR ─── */
+.narrator-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.group-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text3);
+  margin: 28px 0 10px;
+}
+.group-label:first-child { margin-top: 0; }
+.n-type { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 8px; }
+.n-name { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.n-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.n-ex { font-size: 12px; color: var(--gold); margin-top: 10px; font-style: italic; }
+
+/* ─── CONFLICT ─── */
+.c-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+.c-name { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.c-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+/* ─── CALLOUT ─── */
+.callout {
+  position: relative; overflow: hidden;
+  background: rgba(201,168,76,0.04);
+  border-radius: var(--r-sm);
+  padding: 18px 22px;
+  font-size: 14px; color: rgba(232,201,122,0.85); line-height: 1.6;
+  margin-top: 20px;
+}
+.callout::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: var(--r-sm);
+  padding: 1px;
+  background: conic-gradient(from var(--angle,0deg) at 50% 50%, rgba(201,168,76,0.3) 0deg, rgba(201,168,76,0.05) 90deg, rgba(201,168,76,0.3) 180deg, rgba(201,168,76,0.05) 270deg, rgba(201,168,76,0.3) 360deg);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: borderRotate 5s linear infinite;
+  pointer-events: none;
+}
+
+/* ─── QUIZ ─── */
+.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.q-counter { font-size: 13px; color: var(--text2); }
+.q-score { font-size: 13px; font-weight: 600; color: var(--gold); }
+.progress-bar { height: 2px; background: var(--bg4); border-radius: 100px; margin-bottom: 32px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 100px; transition: width 0.4s ease; background: linear-gradient(90deg, #8a6a18, #c9a84c, #e8c97a, #c9a84c, #8a6a18); background-size: 200% 100%; animation: shimmer 3s linear infinite; }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+.q-text {
+  font-family: var(--font-d); font-size: 21px; line-height: 1.4;
+  margin-bottom: 28px; color: var(--text);
+}
+.opts { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.opt {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 16px; border-radius: var(--r-sm);
+  border: 1px solid var(--border); background: var(--bg2);
+  cursor: pointer; font-family: var(--font-s); font-size: 14px;
+  color: var(--text); text-align: left; transition: all 0.15s;
+}
+.opt::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: conic-gradient(from var(--angle,0deg) at 50% 120%, rgba(255,255,255,0.03) 0deg, rgba(255,255,255,0.08) 90deg, rgba(255,255,255,0.03) 180deg, rgba(255,255,255,0) 360deg);
+  opacity: 0; transition: opacity 0.2s;
+  animation: borderRotate 6s linear infinite;
+}
+.opt:hover:not(:disabled) { border-color: var(--border-h); background: var(--bg3); }
+.opt:hover:not(:disabled)::before { opacity: 1; }
+.opt:disabled { cursor: not-allowed; }
+.opt.correct { background: rgba(77,168,122,0.07); border-color: rgba(77,168,122,0.3); color: #7dd4a8; }
+.opt.wrong { background: rgba(201,66,61,0.07); border-color: rgba(201,66,61,0.28); color: #e07b78; }
+.opt-l {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; flex-shrink: 0;
+  transition: all 0.15s; color: var(--text2);
+}
+.opt.correct .opt-l { background: rgba(77,168,122,0.1); border-color: rgba(77,168,122,0.4); color: #7dd4a8; }
+.opt.wrong .opt-l { background: rgba(201,66,61,0.1); border-color: rgba(201,66,61,0.4); color: #e07b78; }
+.opt-text { position: relative; z-index: 1; }
+
+.feedback {
+  display: none; padding: 13px 18px; border-radius: var(--r-sm);
+  font-size: 13px; line-height: 1.6; margin-bottom: 20px;
+}
+.feedback.show { display: block; }
+.feedback.ok { background: rgba(77,168,122,0.07); border: 1px solid rgba(77,168,122,0.25); color: #7dd4a8; }
+.feedback.no { background: rgba(201,66,61,0.07); border: 1px solid rgba(201,66,61,0.25); color: #e07b78; }
+
+.quiz-nav { display: flex; justify-content: space-between; align-items: center; }
+
+/* ─── SCORE ─── */
+#score-view { display: none; }
+.score-card {
+  text-align: center; padding: 64px 32px;
+  position: relative; overflow: hidden;
+}
+.score-emoji { font-size: 52px; display: block; margin-bottom: 20px; }
+.score-num {
+  font-family: var(--font-d); font-size: 80px; line-height: 1;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #8a6a18, #c9a84c, #f0d080, #c9a84c, #8a6a18);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 100%; animation: shimmer 4s linear infinite;
+}
+.score-sub { font-size: 16px; color: var(--text2); margin-bottom: 36px; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 620px) {
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .narrator-row { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 36px; }
+  .q-text { font-size: 17px; }
+  .tab-nav { gap: 3px; padding: 10px 12px; }
+  .tab-btn { padding: 0 12px; font-size: 12px; }
+}
+
+/* ─── OUTROS ─── */
+.outros-role { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 8px; }
+.outros-name { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.outros-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+.outros-ex { font-size: 12px; color: var(--gold); margin-top: 8px; font-style: italic; }
+
+.time-name { font-size: 15px; font-weight: 600; margin-top: 10px; margin-bottom: 8px; }
+.time-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.time-ex { font-size: 12px; color: var(--gold); margin-top: 10px; font-style: italic; }
+
+.persona-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 14px; background: var(--bg3); border-radius: var(--r-sm);
+}
+.persona-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.persona-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.persona-desc { font-size: 13px; color: var(--text2); }
+</style>
+</head>
+<body>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <div class="hero-pill">Publicidade e Propaganda · UNIMAR · 2º PP</div>
+  <h1>Estrutura <em>Narrativa</em><br>Audiovisual</h1>
+  <p class="hero-sub">Aula 01 · Profa. Maria Inês · Material de estudo para prova</p>
+  <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+    <button class="m-btn m-btn-gold" onclick="switchTab('resumo', document.querySelectorAll('.tab-btn')[0])">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21.02 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span>Ver resumo</span>
+    </button>
+    <button class="m-btn" onclick="switchTab('quiz', document.querySelectorAll('.tab-btn')[4])">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Iniciar quiz</span>
+    </button>
+  </div>
+</div>
+
+<!-- ─── TABS ─── -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('resumo',this)"><span>Resumo</span></button>
+  <button class="tab-btn" onclick="switchTab('narrador',this)"><span>Narrador</span></button>
+  <button class="tab-btn" onclick="switchTab('conflito',this)"><span>Conflito</span></button>
+  <button class="tab-btn" onclick="switchTab('tempo',this)"><span>Tempo & Espaço</span></button>
+  <button class="tab-btn" onclick="switchTab('quiz',this)"><span>Quiz</span></button>
+</nav>
+
+<!-- ══════════════════════════════ RESUMO ══════════════════════════════ -->
+<div id="tab-resumo" class="section active">
+<div class="container">
+
+  <div class="sec-eyebrow">Visão geral</div>
+  <h2 class="sec-h">Os 6 elementos da narrativa</h2>
+  <p class="sec-desc">Clique em cada card para expandir o conteúdo.</p>
+
+  <div class="grid-3">
+    <div class="m-card clickable" onclick="toggleCard(this)">
+      <div class="m-card-inner">
+        <span class="el-icon">✍️</span>
+        <div class="el-title">Autor</div>
+        <div class="el-sub">Quem cria o texto</div>
+        <div class="el-detail">Cria o texto deixando pistas sobre o contexto histórico, seu repertório cultural e seu estilo narrativo. Existe <strong>fora da obra</strong> — é diferente do narrador.</div>
+      </div>
+    </div>
+    <div class="m-card clickable" onclick="toggleCard(this)">
+      <div class="m-card-inner">
+        <span class="el-icon">📢</span>
+        <div class="el-title">Narrador</div>
+        <div class="el-sub">Intermediário entre autor e espectador</div>
+        <div class="el-detail">Funções: contar o fato, situar, descrever circunstâncias, sequenciar, apresentar personagens e conflito. Música, câmera e direção de arte também podem narrar.</div>
+      </div>
+    </div>
+    <div class="m-card clickable" onclick="toggleCard(this)">
+      <div class="m-card-inner">
+        <span class="el-icon">🎭</span>
+        <div class="el-title">Personagem</div>
+        <div class="el-sub">Coração da história</div>
+        <div class="el-detail"><strong>Ação é personagem.</strong> Devem ter personalidade, história pregressa e conflitos para criar empatia. O roteiro descreve física e psicologicamente.</div>
+      </div>
+    </div>
+    <div class="m-card clickable" onclick="toggleCard(this)">
+      <div class="m-card-inner">
+        <span class="el-icon">⚡</span>
+        <div class="el-title">Conflito</div>
+        <div class="el-sub">Gatilho de transformações</div>
+        <div class="el-detail">A história não se move sem conflito. É a escolha entre situações incompatíveis. Quanto mais esferas de conflito, melhor — os conflitos se sobrepõem como na vida.</div>
+      </div>
+    </div>
+    <div class="m-card clickable" onclick="toggleCard(this)">
+      <div class="m-card-inner">
+        <span class="el-icon">🗺️</span>
+        <div class="el-title">Espaço</div>
+        <div class="el-sub">Onde a história acontece</div>
+        <div class="el-detail"><strong>Espaço In:</strong> o que vemos na tela.<br><br><strong>Espaço Off:</strong> lugar fora da cena — não visualizado, apenas "ouvimos" ou percebemos por reações. Ex: mãe do Howard em Big Bang Theory.</div>
+      </div>
+    </div>
+    <div class="m-card clickable" onclick="toggleCard(this)">
+      <div class="m-card-inner">
+        <span class="el-icon">⏱️</span>
+        <div class="el-title">Tempo</div>
+        <div class="el-sub">Como os fatos se organizam</div>
+        <div class="el-detail">Um fato pode ser <strong>alongado, diminuído, interrompido ou invertido.</strong> Dois tipos: cronológico (datas, flashbacks com lógica) e psicológico (imaginação do personagem).</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-eyebrow">Narradores não-textuais</div>
+  <h2 class="sec-h">Outros elementos que narram</h2>
+  <p class="sec-desc">Recursos que conduzem a narrativa como se fossem narradores.</p>
+
+  <div class="grid-2">
+    <div class="m-card"><div class="m-card-inner">
+      <div class="outros-role">Visual</div>
+      <div class="outros-name">Direção de arte</div>
+      <div class="outros-desc">Cores, cenários e objetos comunicam contexto emocional e social sem palavras. A paleta de cor de um filme pode diferenciar mundos.</div>
+      <div class="outros-ex">Traffic (2000) · Sociedade dos Poetas Mortos (1989) · Juno (2007)</div>
+    </div></div>
+    <div class="m-card"><div class="m-card-inner">
+      <div class="outros-role">Sonoro</div>
+      <div class="outros-name">Música</div>
+      <div class="outros-desc">A trilha sonora guia emoções, reforça sentidos das cenas e pode carregar o peso narrativo sozinha.</div>
+      <div class="outros-ex">Across the Universe (2007) · Mama Mia (2008)</div>
+    </div></div>
+    <div class="m-card"><div class="m-card-inner">
+      <div class="outros-role">Câmera</div>
+      <div class="outros-name">Ponto de vista</div>
+      <div class="outros-desc">O ângulo e posicionamento da câmera determinam o que o espectador "sente" e "sabe" — uma escolha narrativa fundamental.</div>
+      <div class="outros-ex">Viajo porque Preciso… (2009) · The Affair (2014)</div>
+    </div></div>
+    <div class="m-card"><div class="m-card-inner">
+      <div class="outros-role">Espaço</div>
+      <div class="outros-name">Espaço off</div>
+      <div class="outros-desc">O que existe fora do quadro mas é percebido pelo som ou reação dos personagens — cria presença sem mostrar.</div>
+      <div class="outros-ex">Fargo (2014) · mãe do Howard em Big Bang Theory</div>
+    </div></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════ NARRADOR ══════════════════════════════ -->
+<div id="tab-narrador" class="section">
+<div class="container">
+
+  <div class="sec-eyebrow">Elemento narrativo</div>
+  <h2 class="sec-h">O narrador e seus tipos</h2>
+  <p class="sec-desc">Intermediário entre o autor e o espectador — suas funções: contar, situar, descrever, apresentar personagens e conflito.</p>
+
+  <div class="group-label">Narrador em 1ª pessoa</div>
+  <div class="narrator-row">
+    <div class="m-card m-card-gold"><div class="m-card-inner">
+      <span class="badge b-gold">1ª pessoa · A</span>
+      <div class="n-type">Protagonista</div>
+      <div class="n-name">Narrador protagonista</div>
+      <div class="n-desc">É o personagem principal. Conta algo acontecido com ele mesmo. Narração subjetiva e parcial — tem opiniões e julgamentos. Causa suspense: o espectador descobre junto com ele.</div>
+      <div class="n-ex">Jane, a Virgem (2014) · You (2018)</div>
+    </div></div>
+    <div class="m-card"><div class="m-card-inner">
+      <span class="badge b-gold">1ª pessoa · B</span>
+      <div class="n-type">Testemunha</div>
+      <div class="n-name">Narrador testemunha</div>
+      <div class="n-desc">É um dos outros personagens da história. Narra os acontecimentos do protagonista a partir de sua perspectiva lateral — com envolvimento, mas sem ser o centro.</div>
+      <div class="n-ex">O Grande Gatsby · filmes de crime com narrador secundário</div>
+    </div></div>
+  </div>
+
+  <div class="group-label">Narrador em 3ª pessoa</div>
+  <div class="narrator-row">
+    <div class="m-card"><div class="m-card-inner">
+      <span class="badge b-purple">3ª pessoa · A</span>
+      <div class="n-type">Observador</div>
+      <div class="n-name">Narrador observador</div>
+      <div class="n-desc">Testemunha dos fatos, mas não faz parte deles. Tem somente seu ponto de vista — não participa das ações. Narra de fora, com ampla liberdade.</div>
+      <div class="n-ex">Documentários · narrações externas em animações</div>
+    </div></div>
+    <div class="m-card m-card-gold"><div class="m-card-inner">
+      <span class="badge b-purple">3ª pessoa · B</span>
+      <div class="n-type">Onisciente</div>
+      <div class="n-name">Narrador onisciente</div>
+      <div class="n-desc">Sabe de tudo: conhece todos os aspectos da história e dos personagens. Pode descrever sentimentos e influenciar o espectador a se posicionar a favor ou contra eles.</div>
+      <div class="n-ex">Jane, a Virgem (voz over) · Anne with an E (2017)</div>
+    </div></div>
+  </div>
+
+  <div class="callout">
+    💡 Outros elementos também funcionam como narradores — música, direção de arte, ponto de vista de câmera e espaço off conduzem a narrativa sem palavras.
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════ CONFLITO ══════════════════════════════ -->
+<div id="tab-conflito" class="section">
+<div class="container">
+
+  <div class="sec-eyebrow">Elemento narrativo</div>
+  <h2 class="sec-h">Conflito — o motor da história</h2>
+  <p class="sec-desc">A história não se move sem conflito. É o gatilho de desafios e transformações — a escolha entre situações incompatíveis.</p>
+
+  <div class="grid-3">
+    <div class="m-card"><div class="m-card-inner" style="text-align:center;">
+      <span class="c-icon">🧠</span>
+      <span class="badge b-blue">Interno</span>
+      <div class="c-name">Conflito interno</div>
+      <div class="c-desc">Entre o protagonista e ele mesmo — sua consciência. Dilema moral, culpa, valores em choque.</div>
+    </div></div>
+    <div class="m-card m-card-gold"><div class="m-card-inner" style="text-align:center;">
+      <span class="c-icon">👥</span>
+      <span class="badge b-gold">Pessoal</span>
+      <div class="c-name">Conflito pessoal</div>
+      <div class="c-desc">Entre o protagonista e personagens secundários — pai, amigos, parceiro, antagonista.</div>
+    </div></div>
+    <div class="m-card"><div class="m-card-inner" style="text-align:center;">
+      <span class="c-icon">🌍</span>
+      <span class="badge b-red">Extrapessoal</span>
+      <div class="c-name">Conflito extrapessoal</div>
+      <div class="c-desc">Entre o protagonista e uma instituição, sistema ou força não-humana. O individual contra o coletivo.</div>
+    </div></div>
+  </div>
+
+  <div class="callout">
+    💡 Quanto mais esferas de conflito tem uma narrativa, melhor ela será. Os conflitos se sobrepõem como na vida real. Quanto mais conflito humano, maior é a projeção do espectador.
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-eyebrow">Personagem</div>
+  <h2 class="sec-h">Tipos de personagem</h2>
+  <p class="sec-desc">Ação é personagem — ele é o coração da história. Espectadores experimentam sensações através deles.</p>
+
+  <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+    <div class="persona-row">
+      <div class="persona-dot" style="background:var(--gold);"></div>
+      <div>
+        <div class="persona-title">Protagonista</div>
+        <div class="persona-desc">Personagem principal — pode ser um ou mais. É em torno dele que gira toda a história. O espectador se identifica e experimenta a jornada através dele.</div>
+      </div>
+    </div>
+    <div class="persona-row">
+      <div class="persona-dot" style="background:var(--text3);"></div>
+      <div>
+        <div class="persona-title">Personagem secundário</div>
+        <div class="persona-desc">Relevante em relação à história do protagonista. Pode ser aliado ou opositor — cria obstáculos ou apoia a trajetória principal.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    📋 Para criar empatia, um personagem precisa de: personalidade definida, história pregressa e conflitos. O roteiro deve descrevê-lo física e psicologicamente.
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════ TEMPO ══════════════════════════════ -->
+<div id="tab-tempo" class="section">
+<div class="container">
+
+  <div class="sec-eyebrow">Elemento narrativo</div>
+  <h2 class="sec-h">Tempo</h2>
+  <p class="sec-desc">Toda história se passa em algum momento. Um fato pode ser alongado, diminuído, interrompido ou invertido. Passado e futuro, imaginário e real se sobrepõem.</p>
+
+  <div class="grid-2">
+    <div class="m-card m-card-gold"><div class="m-card-inner">
+      <span class="badge b-gold">Cronológico</span>
+      <div class="time-name">Tempo cronológico</div>
+      <div class="time-desc">Registrado por indicações de calendário — anos, meses, dias, horas. Mesmo em flashbacks, há uma lógica sequencial ou datada que orienta o espectador.</div>
+      <div class="time-ex">Quem quer ser um milionário? (2009) · A Odisseia (2025)</div>
+    </div></div>
+    <div class="m-card"><div class="m-card-inner">
+      <span class="badge b-purple">Psicológico</span>
+      <div class="time-name">Tempo psicológico</div>
+      <div class="time-desc">Narrado a partir da imaginação dos personagens. Não tem conexão com o real — um segundo pode durar uma hora na tela, ou uma vida ser comprimida num instante.</div>
+      <div class="time-ex">Super Bad — cena do supermercado</div>
+    </div></div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-eyebrow">Elemento narrativo</div>
+  <h2 class="sec-h">Espaço</h2>
+  <p class="sec-desc">"Onde" se situam os personagens e se processa a sequência dos fatos.</p>
+
+  <div class="grid-2">
+    <div class="m-card"><div class="m-card-inner">
+      <span class="badge b-green">In</span>
+      <div class="time-name">Espaço In</div>
+      <div class="time-desc">Aquele lugar que vemos os personagens atuando. É o espaço presente na tela — o que o quadro da câmera enquadra e exibe ao espectador em tempo real.</div>
+      <div class="time-ex">Qualquer cena onde os personagens estão visíveis e agindo</div>
+    </div></div>
+    <div class="m-card"><div class="m-card-inner">
+      <span class="badge b-red">Off</span>
+      <div class="time-name">Espaço Off</div>
+      <div class="time-desc">Lugar fora da cena visualizada, mas que "ouvimos". Existe no universo da história mas não é mostrado — apenas percebido por sons ou reações dos personagens.</div>
+      <div class="time-ex">Fargo (2014) · mãe do Howard em Big Bang Theory</div>
+    </div></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════ QUIZ ══════════════════════════════ -->
+<div id="tab-quiz" class="section">
+<div class="container">
+
+  <div class="sec-eyebrow">Prova de estudos</div>
+  <h2 class="sec-h">Quiz — Narrativa Audiovisual</h2>
+  <p class="sec-desc" style="margin-bottom:36px;">12 perguntas cobrindo todos os conceitos da aula.</p>
+
+  <div id="quiz-main">
+    <div class="quiz-header">
+      <span class="q-counter" id="q-counter">Pergunta 1 de 12</span>
+      <span class="q-score" id="q-score">0 corretas</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog" style="width:8%;"></div></div>
+    <div class="m-card"><div class="m-card-inner" style="padding:28px;">
+      <div class="q-text" id="q-text"></div>
+      <div class="opts" id="q-opts"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="quiz-nav">
+        <button class="m-btn" onclick="prevQ()" id="btn-prev" style="opacity:0.4; pointer-events:none;" disabled><span>← Anterior</span></button>
+        <button class="m-btn m-btn-gold" onclick="nextQ()" id="btn-next" style="opacity:0.4; pointer-events:none;" disabled><span>Próxima →</span></button>
+      </div>
+    </div></div>
+  </div>
+
+  <div id="score-view">
+    <div class="m-card m-card-gold"><div class="m-card-inner score-card">
+      <span class="score-emoji" id="score-emoji"></span>
+      <div class="score-num" id="score-num"></div>
+      <div class="score-sub" id="score-sub"></div>
+      <button class="m-btn m-btn-gold" onclick="restartQuiz()"><span>Tentar novamente</span></button>
+    </div></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+function switchTab(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+function toggleCard(el) {
+  el.classList.toggle('open');
+}
+
+const Qs = [
+  { q:"Qual é a principal função do narrador na narrativa audiovisual?", opts:["Criar o texto e deixar pistas históricas","Ser intermediário entre o autor e o espectador","Dar voz à consciência do protagonista","Definir a trilha sonora do filme"], a:1, exp:"O narrador é o intermediário entre autor e espectador. Suas funções: contar o fato, situar, descrever circunstâncias, apresentar personagens e conflito." },
+  { q:"O narrador que conta algo acontecido consigo mesmo, de forma subjetiva e parcial, chama-se:", opts:["Narrador observador","Narrador onisciente","Narrador protagonista","Narrador testemunha"], a:2, exp:"O narrador em 1ª pessoa protagonista conta algo acontecido com ele mesmo. Narração subjetiva e parcial — tem opiniões e julgamentos. O espectador descobre os fatos junto com ele." },
+  { q:"O narrador onisciente tem qual característica principal?", opts:["Faz parte da história como personagem secundário","Conhece apenas o ponto de vista do protagonista","Sabe de tudo e pode descrever sentimentos, influenciando o espectador","Narra apenas o que vê, sem interpretar"], a:2, exp:"O narrador onisciente conhece todos os aspectos da história e dos personagens, podendo descrever sentimentos e influenciar o espectador a se posicionar." },
+  { q:"Qual é a diferença entre espaço In e espaço Off?", opts:["In é espaço mental; Off é espaço físico","In é o que vemos na tela; Off é o que existe mas não é mostrado — apenas percebido","In é o cenário principal; Off é o secundário","In é do protagonista; Off é do antagonista"], a:1, exp:"Espaço In: onde vemos os personagens atuando. Espaço Off: fora da cena — existe, mas não é visualizado, apenas 'ouvimos' ou percebemos por reações." },
+  { q:"Segundo o conteúdo da aula, a história não se move sem:", opts:["Um narrador em voz over","Um personagem com história pregressa bem definida","Conflito","Direção de arte elaborada"], a:2, exp:"O conflito é o gatilho de desafios e transformações. É a escolha entre situações incompatíveis. Sem conflito, a história não avança." },
+  { q:"O conflito interno é aquele que ocorre:", opts:["Entre o protagonista e a sociedade","Entre o protagonista e ele mesmo — sua consciência","Entre dois personagens secundários","Entre o protagonista e uma instituição"], a:1, exp:"O conflito interno acontece dentro do próprio protagonista — entre ele e sua consciência. Ex: dilema moral, culpa, valores em choque." },
+  { q:"O conflito extrapessoal envolve:", opts:["A luta interna do protagonista","O protagonista contra personagens secundários como pai ou amigos","O protagonista e algo exterior — uma instituição ou força não-humana","Dois protagonistas em disputa direta"], a:2, exp:"O conflito extrapessoal é entre o protagonista e algo exterior — uma instituição, o sistema, a natureza ou qualquer força não-humana." },
+  { q:"O tempo psicológico na narrativa é aquele que:", opts:["Segue a ordem cronológica dos eventos","É registrado por datas e calendário, mesmo em flashbacks","É narrado a partir da imaginação dos personagens, sem conexão com o tempo real","Mistura presente e passado usando flashbacks lineares"], a:2, exp:"O tempo psicológico é narrado a partir da imaginação dos personagens — não tem conexão com o real. Um segundo pode se estender por longa duração na tela." },
+  { q:"O que caracteriza o tempo cronológico?", opts:["Baseia-se na percepção subjetiva do personagem","É registrado por indicações de calendário, mesmo em flashbacks","Ignora completamente a ordem real dos acontecimentos","Só é válido quando a história é contada linearmente"], a:1, exp:"O tempo cronológico é registrado por indicações de calendário (anos, meses, dias, horas), mesmo quando narrado em flashbacks." },
+  { q:"Para criar empatia com o espectador, um personagem deve ter:", opts:["Apenas características físicas bem descritas","Personalidade, história pregressa e conflitos","Um conflito extrapessoal obrigatório","Narração em primeira pessoa"], a:1, exp:"Um personagem deve ter personalidade, história pregressa e conflitos para criar empatia. O roteiro deve descrevê-lo física e psicologicamente." },
+  { q:"Quais elementos também podem funcionar como narradores, segundo a aula?", opts:["Apenas o roteiro e o diretor","Música, direção de arte e ponto de vista de câmera","Somente o espaço off e o tempo psicológico","Efeitos sonoros e legenda"], a:1, exp:"Música, direção de arte (iluminação, cores, cenário) e ponto de vista da câmera podem conduzir a narrativa como se fossem narradores, sem palavras." },
+  { q:"Quanto mais esferas de conflito uma narrativa tem:", opts:["Mais confusa ela fica para o espectador","Menor é a identificação do público","Melhor ela será — os conflitos se sobrepõem como na vida real","Mais longa precisa ser para fazer sentido"], a:2, exp:"Quanto mais esferas de conflito, melhor a narrativa. Os conflitos se sobrepõem como na vida real. Quanto mais conflito humano, maior a projeção do espectador." }
+];
+
+let cur=0, score=0, answered=[];
+
+function setBtn(btn, disabled) {
+  btn.disabled = disabled;
+  btn.style.opacity = disabled ? '0.4' : '1';
+  btn.style.pointerEvents = disabled ? 'none' : 'auto';
+}
+
+function renderQ() {
+  const q = Qs[cur];
+  document.getElementById('q-counter').textContent = `Pergunta ${cur+1} de ${Qs.length}`;
+  document.getElementById('q-score').textContent = `${score} correta${score!==1?'s':''}`;
+  document.getElementById('prog').style.width = ((cur+1)/Qs.length*100)+'%';
+  document.getElementById('q-text').textContent = q.q;
+  const L = ['A','B','C','D'];
+  const opts = document.getElementById('q-opts');
+  opts.innerHTML = '';
+  q.opts.forEach((o,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="opt-l">${L[i]}</span><span class="opt-text">${o}</span>`;
+    btn.onclick = () => selectOpt(i);
+    if (answered[cur] !== undefined) {
+      btn.disabled = true;
+      if (i===q.a) btn.classList.add('correct');
+      else if (i===answered[cur]) btn.classList.add('wrong');
+    }
+    opts.appendChild(btn);
+  });
+  const fb = document.getElementById('feedback');
+  if (answered[cur] !== undefined) {
+    const ok = answered[cur]===q.a;
+    fb.className = 'feedback show '+(ok?'ok':'no');
+    fb.textContent = (ok?'✓ Correto! ':'✗ Incorreto. ')+q.exp;
+  } else { fb.className='feedback'; fb.textContent=''; }
+  setBtn(document.getElementById('btn-prev'), cur===0);
+  setBtn(document.getElementById('btn-next'), answered[cur]===undefined);
+  document.getElementById('btn-next').querySelector('span').textContent =
+    (cur===Qs.length-1 && answered[cur]!==undefined) ? 'Ver resultado' : 'Próxima →';
+}
+
+function selectOpt(i) {
+  if (answered[cur]!==undefined) return;
+  const q = Qs[cur];
+  answered[cur] = i;
+  if (i===q.a) score++;
+  document.getElementById('q-score').textContent = `${score} correta${score!==1?'s':''}`;
+  document.querySelectorAll('.opt').forEach((b,idx) => {
+    b.disabled=true;
+    if (idx===q.a) b.classList.add('correct');
+    else if (idx===i) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('feedback');
+  const ok = i===q.a;
+  fb.className='feedback show '+(ok?'ok':'no');
+  fb.textContent=(ok?'✓ Correto! ':'✗ Incorreto. ')+q.exp;
+  setBtn(document.getElementById('btn-next'), false);
+  if (cur===Qs.length-1) document.getElementById('btn-next').querySelector('span').textContent='Ver resultado';
+}
+
+function nextQ() {
+  if (cur===Qs.length-1) { showScore(); return; }
+  cur++; renderQ();
+}
+
+function prevQ() { if (cur>0){cur--;renderQ();} }
+
+function showScore() {
+  document.getElementById('quiz-main').style.display='none';
+  document.getElementById('score-view').style.display='block';
+  const pct = Math.round(score/Qs.length*100);
+  document.getElementById('score-emoji').textContent = pct>=80?'🎬':pct>=50?'🎞️':'📽️';
+  document.getElementById('score-num').textContent = `${score}/${Qs.length}`;
+  document.getElementById('score-sub').textContent = pct>=80?'Excelente! Você domina a estrutura narrativa audiovisual.':pct>=50?'Bom progresso. Revise o resumo e tente novamente.':'Continue estudando — você consegue!';
+}
+
+function restartQuiz() {
+  cur=0;score=0;answered=[];
+  document.getElementById('quiz-main').style.display='block';
+  document.getElementById('score-view').style.display='none';
+  renderQ();
+}
+
+renderQ();
+</script>
+</body>
+</html>
